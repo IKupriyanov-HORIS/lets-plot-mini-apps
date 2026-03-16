@@ -27,6 +27,7 @@ allprojects {
 
         // SNAPSHOTS
         maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
+        mavenLocal()
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
