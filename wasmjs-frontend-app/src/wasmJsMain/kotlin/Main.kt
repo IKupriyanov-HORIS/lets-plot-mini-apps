@@ -1,32 +1,22 @@
-/*
- * Copyright (c) 2021. JetBrains s.r.o.
- * Use of this source code is governed by the MIT license that can be found in the LICENSE file.
- */
-
-import kotlinx.browser.document
-import kotlinx.browser.window
-import org.jetbrains.letsPlot.Figure
-import org.jetbrains.letsPlot.frontend.JsFrontendUtil
+import androidx.compose.runtime.Composable
+import org.jetbrains.compose.web.renderComposable
+import org.jetbrains.letsPlot.compose.PlotPanel
 import org.jetbrains.letsPlot.geom.geomDensity
 import org.jetbrains.letsPlot.letsPlot
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.ln
-import kotlin.math.sqrt
+import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    val f: Figure
-    window.onload = { createContent() }
+    renderComposable(rootElementId = "root") {
+        // Compose UI structure
+        PlotContainer()
+    }
 }
 
-fun createContent() {
-    val contentDiv = document.getElementById("content")
-
+@Composable
+fun PlotContainer() {
     val n = 200
-    val data = mapOf<String, Any>(
-        "x" to List(n) { nextGaussian() }
-    )
+    val data = mapOf("x" to List(n) { nextGaussian() })
 
     val p = letsPlot(data) + geomDensity(
         color = "dark-green",
@@ -35,15 +25,19 @@ fun createContent() {
         size = 2.0
     ) { x = "x" }
 
-    val plotDiv = JsFrontendUtil.createPlotDiv(p)
-    contentDiv?.appendChild(plotDiv)
+    // PlotPanel is the official way to embed a plot in Compose
+    PlotPanel(
+        figure = p,
+        modifier = {
+            // Use standard Compose modifiers
+            style {
+                width(400.px)
+                height(300.px)
+            }
+        }
+    )
 }
 
-/**
- * The Box-Muller transform converts two independent uniform variates on (0, 1)
- * into two standard Gaussian variates (mean 0, variance 1).
- * https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
- */
 fun nextGaussian(): Double {
     var u = 0.0
     var v = 0.0
