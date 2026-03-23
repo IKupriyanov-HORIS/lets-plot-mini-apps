@@ -5,8 +5,6 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.compose")
-    id("org.jetbrains.compose")
 }
 
 val kotlinxBrowserVersion = project.extra["kotlinx.browser.version"] as String
@@ -25,9 +23,6 @@ kotlin {
     sourceSets {
         wasmJsMain {
             dependencies {
-                implementation(compose.html.core)
-                implementation(compose.runtime)
-
                 implementation("org.jetbrains.lets-plot:lets-plot-kotlin:$letsPlotKotlinVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-browser:${kotlinxBrowserVersion}")
             }
